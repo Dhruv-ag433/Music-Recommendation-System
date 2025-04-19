@@ -19,6 +19,10 @@ def fetch_track_data(track_id):
     try:
         track = sp.track(track_id)
         
+        image_url = None
+        if track['album']['images']:
+            image_url = track['album']['images'][0]['url']
+            
         data = {
             "track_id": track_id,
             "name": track['name'],
@@ -27,6 +31,7 @@ def fetch_track_data(track_id):
             "release_year": track['album']['release_date'][:4],
             "popularity": track['popularity'],
             "duration_ms": track['duration_ms'],
+            "image_url": image_url
         }
         return data
     

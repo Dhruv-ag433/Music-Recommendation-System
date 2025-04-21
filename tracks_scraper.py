@@ -25,13 +25,13 @@ def fetch_track_data(track_id):
             
         data = {
             "track_id": track_id,
+            "image_url": image_url,
             "name": track['name'],
             "artist": track['artists'][0]['name'],
             "album": track['album']['name'],
             "release_year": track['album']['release_date'][:4],
             "popularity": track['popularity'],
-            "duration_ms": track['duration_ms'],
-            "image_url": image_url
+            "duration_ms": track['duration_ms']
         }
         return data
     

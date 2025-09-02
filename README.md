@@ -45,15 +45,22 @@ This project aims to deliver meaningful music recommendations using a content-ba
 ## 📁 Folder Structure
 
 ```
-music-recommendation-system/
+music-recommender/
+│── backend/
+│   │── main.py              # FastAPI entry point (APIs run here)
+│   │── spotify_utils.py     # Functions to fetch songs from Spotify API
+│   │── recommender.py       # Recommendation logic (dataset + hybrid methods)
+│   │── models/              # (optional) ML models, embeddings, etc.
 │
-├── app/                   # FastAPI backend (optional)
-├── ui/                    # Streamlit frontend
-├── data/                  # Dataset CSVs and audio metadata
-├── models/                # Saved vectorizer or similarity matrix
-├── utils/                 # Preprocessing scripts and helpers
-├── requirements.txt       # Python dependencies
-└── README.md              # Project documentation
+│── frontend/
+│   │── app.py               # Streamlit UI
+│
+│── data/
+│   │── songs_dataset.csv    # Dataset (songs + metadata + lyrics)
+│
+│── requirements.txt         # Dependencies
+│── README.md
+
 ```
 
 ---

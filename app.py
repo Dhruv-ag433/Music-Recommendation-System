@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
-import backend.recommendation as recommendation
+import recommendation
 
 app = FastAPI()
 

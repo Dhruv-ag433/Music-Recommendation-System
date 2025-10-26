@@ -4,7 +4,7 @@ import json
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
-from backend.spotify_utils.process_new import process_track_id
+from process_new import process_track_id
 
 with open("./credits/spotify_credits.json", "r") as file:
     creds = json.load(file)

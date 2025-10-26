@@ -1,8 +1,7 @@
 import streamlit as st
 import requests
-import os
 
-FASTAPI_URL = os.getenv("FASTAPI_URL", "http://localhost:8000/recommend")
+FASTAPI_URL = "http://localhost:8000/recommend"
 st.title("🎵 Music Recommendation System")
 
 # Inputs

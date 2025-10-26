@@ -13,10 +13,8 @@ COLUMNS = [
     "danceability", "image_url"
 ]
 
-DATASET_PATH = os.getenv("DATASET_PATH", "/app/dataset/spotify_tracks_with_audio_features.csv")
-OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/app/dataset/spotify_tracks_with_audio_features.csv")
-AUDIO_DIR = os.getenv("AUDIO_DIR", "/app/audio")
-
+DATASET_PATH = "data/songs_dataset.csv"
+AUDIO_DIR = "./audio"
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
 def process_track_id(track_id: str):

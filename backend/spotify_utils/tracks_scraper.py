@@ -3,13 +3,14 @@ import spotipy
 import pandas as pd
 import time
 import json
-import os
 
-SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
-SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-SAVE_PATH = os.getenv("SAVE_PATH", "/app/dataset/spotify_tracks_dataset.csv")
+with open("./credits/spotify_credits.json", "r") as file:
+    creds = json.load(file)
+    
+client_id = creds["client_id"]
+client_secret = creds["client_secret"]
 
-auth_manager = SpotifyClientCredentials(client_id=SPOTIFY_CLIENT_ID, client_secret=SPOTIFY_CLIENT_SECRET)
+auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 print("[✅] Spotify connection established.")
@@ -59,7 +60,7 @@ def get_track_ids_from_query(query, max_results=250):
 
     return all_track_ids
 
-def scrape_tracks(queries, max_per_query=5):
+def scrape_tracks(queries, max_per_query=5, save_path="./dataset/spotify_tracks_dataset.csv"):
     all_tracks = []
     
     for query in queries:
@@ -76,12 +77,12 @@ def scrape_tracks(queries, max_per_query=5):
 
     df = pd.DataFrame(all_tracks)
     try:
-        existing_df = pd.read_csv(SAVE_PATH)
+        existing_df = pd.read_csv(save_path)
         df = pd.concat([existing_df, df], ignore_index=True).drop_duplicates(subset=['track_id'])
     except FileNotFoundError:
         pass
     
-    df.to_csv(SAVE_PATH, index=False)
+    df.to_csv(save_path, index=False)
     
 def process_in_batches(search_queries, batch_size=10, wait_time=60):
     total_queries = len(search_queries)

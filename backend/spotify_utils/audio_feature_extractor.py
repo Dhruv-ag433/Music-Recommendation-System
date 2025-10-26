@@ -6,12 +6,10 @@ import numpy as np
 import yt_dlp
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-AUDIO_DIR = os.getenv("AUDIO_DIR", "/app/audio")
-DATASET_PATH = os.getenv("DATASET_PATH", "/app/dataset/spotify_tracks_dataset.csv")
-OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/app/dataset/spotify_tracks_with_audio_features.csv")
-MAX_WORKERS = int(os.getenv("MAX_WORKERS", 8))
-FFMPEG_PATH = os.getenv("FFMPEG_PATH", "/usr/bin/ffmpeg")  # container-friendly
-os.makedirs(AUDIO_DIR, exist_ok=True)
+AUDIO_DIR = "./audio"
+DATASET_PATH = "./dataset/spotify_tracks_dataset.csv"
+OUTPUT_PATH = "./dataset/spotify_tracks_with_audio_features.csv"
+MAX_WORKERS = 8
 
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
@@ -35,22 +33,21 @@ def search_youtube(query):
 
 def download_audio(url, filename):
     try:
-        out_path = os.path.join(AUDIO_DIR, filename)
         ydl_opts = {
             'format': 'bestaudio/best',
-            'outtmpl': out_path,
+            'outtmpl': os.path.join(AUDIO_DIR, filename),
             'quiet': True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }],
-            'ffmpeg_location': FFMPEG_PATH
+            'ffmpeg_location': r'C:\\ffmpeg\\bin\\ffmpeg.exe'
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-        return f"{out_path}.mp3"
+        return os.path.join(AUDIO_DIR, f"{filename}.mp3")
     except Exception as e:
         print(f"[DOWNLOAD ERROR] {url}: {e}")
         return None

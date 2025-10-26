@@ -1,28 +1,23 @@
 import pandas as pd
 import json
+import os
 import time
 import threading
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from queue import Queue
 
-# Load credentials
-with open("./credits/spotify_credits.json", "r") as file:
-    creds = json.load(file)
+SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+INPUT_CSV = os.getenv("INPUT_CSV", "/app/dataset/spotify_tracks_dataset.csv")
+OUTPUT_CSV = os.getenv("OUTPUT_CSV", "/app/dataset/spotify_track_images.csv")
 
-client_id = creds["client_id"]
-client_secret = creds["client_secret"]
-
-auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+auth_manager = SpotifyClientCredentials(client_id=SPOTIFY_CLIENT_ID, client_secret=SPOTIFY_CLIENT_SECRET)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 print("[✅] Spotify connection established.")
 
-# Input/Output paths
-input_csv = "./dataset/spotify_tracks_dataset.csv"
-output_csv = "./dataset/spotify_track_images.csv"
-
 # Load input data
-df = pd.read_csv(input_csv)
+df = pd.read_csv(INPUT_CSV)
 track_ids = df["track_id"].dropna().unique().tolist()
 
 track_ids_to_process = track_ids[4500:]
@@ -57,12 +52,12 @@ def save_batch():
     if output_data:
         batch_df = pd.DataFrame(output_data)
         try:
-            existing_df = pd.read_csv(output_csv)
+            existing_df = pd.read_csv(OUTPUT_CSV)
             batch_df = pd.concat([existing_df, batch_df], ignore_index=True).drop_duplicates(subset=["track_id"])
         except FileNotFoundError:
             pass
 
-        batch_df.to_csv(output_csv, index=False)
+        batch_df.to_csv(OUTPUT_CSV, index=False)
         print(f"[💾] Saved batch of {len(output_data)} rows.")
         output_data = []  # Clear after saving
 

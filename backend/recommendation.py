@@ -5,17 +5,16 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
 from backend.spotify_utils.process_new import process_track_id
-
-with open("./credits/spotify_credits.json", "r") as file:
-    creds = json.load(file)
+import os
     
-client_id = creds["client_id"]
-client_secret = creds["client_secret"]
+SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+auth_manager = SpotifyClientCredentials(client_id=SPOTIFY_CLIENT_ID, client_secret=SPOTIFY_CLIENT_SECRET)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-DATASET_PATH = "./dataset/spotify_tracks_with_audio_features.csv"
+DATA_PATH = os.getenv("DATA_PATH", "./dataset")
+DATASET_PATH = os.path.join(DATA_PATH, "spotify_tracks_with_audio_features.csv")
 df = pd.read_csv(DATASET_PATH)
 
 feature_cols = ['tempo', 'energy', 'speechiness', 'acousticness',

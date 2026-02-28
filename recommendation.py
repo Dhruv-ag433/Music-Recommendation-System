@@ -1,6 +1,6 @@
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-import json
+import os
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
@@ -8,11 +8,8 @@ from process_new import process_track_id
 from sync import sync_csv_to_db
 from config import DATASET_FILE
 
-with open("./credits/spotify_credits.json", "r") as file:
-    creds = json.load(file)
-    
-client_id = creds["client_id"]
-client_secret = creds["client_secret"]
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)

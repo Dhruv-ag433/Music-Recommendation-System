@@ -1,17 +1,13 @@
 import pandas as pd
-import json
+import os
 import time
 import threading
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from queue import Queue
 
-# Load credentials
-with open("./credits/spotify_credits.json", "r") as file:
-    creds = json.load(file)
-
-client_id = creds["client_id"]
-client_secret = creds["client_secret"]
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)

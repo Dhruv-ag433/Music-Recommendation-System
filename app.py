@@ -6,9 +6,11 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import recommendation
-
 import os
-print(">>> DATABASE_URL FROM APP:", os.getenv("DATABASE_URL"))
+
+print("SPOTIFY_CLIENT_ID =", bool(os.getenv("SPOTIFY_CLIENT_ID")))
+print("SPOTIFY_CLIENT_SECRET =", bool(os.getenv("SPOTIFY_CLIENT_SECRET")))
+print("DATABASE_URL =", bool(os.getenv("DATABASE_URL")))
 
 app = FastAPI()
 

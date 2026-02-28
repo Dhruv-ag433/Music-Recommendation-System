@@ -1,7 +1,5 @@
 import pandas as pd
 import os
-import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from tracks_scraper import fetch_track_data
 from audio_feature_extractor import  search_youtube, download_audio, extract_audio_features

@@ -5,6 +5,8 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
 from process_new import process_track_id
+from sync import sync_csv_to_db
+from config import DATASET_FILE
 
 with open("./credits/spotify_credits.json", "r") as file:
     creds = json.load(file)
@@ -15,8 +17,7 @@ client_secret = creds["client_secret"]
 auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-DATASET_PATH = "./dataset/spotify_tracks_with_audio_features.csv"
-df = pd.read_csv(DATASET_PATH)
+df = pd.read_csv(DATASET_FILE)
 
 feature_cols = ['tempo', 'energy', 'speechiness', 'acousticness',
                 'instrumentalness', 'liveness', 'valence', 'danceability']
@@ -80,7 +81,13 @@ def recommend_by_track_id(track_id, num_recommendations=10):
     # Step 2: Save & retrain if dataset updated
     if new_entries:
         df = pd.concat([df, pd.DataFrame(new_entries)], ignore_index=True)
-        df.to_csv(DATASET_PATH, index=False)
+        df.to_csv(DATASET_FILE, index=False)
+        
+        #Persistance
+        try:
+            sync_csv_to_db(df)
+        except Exception as e:
+            print("[WARN] DB sync failed:", e)
 
         df_features = scaler.fit_transform(df[feature_cols])
         knn_model.fit(df_features)

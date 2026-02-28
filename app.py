@@ -1,8 +1,14 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import recommendation
+
+import os
+print(">>> DATABASE_URL FROM APP:", os.getenv("DATABASE_URL"))
 
 app = FastAPI()
 

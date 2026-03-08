@@ -90,7 +90,11 @@ def recommend_by_track_id(track_id, num_recommendations=10):
         knn_model.fit(df_features)
 
     # Step 3: Get the track name & artist for KNN recommendation
-    track_data = df.loc[df['track_id'] == track_id].iloc[0]
+    track_rows = df.loc[df['track_id'] == track_id]
+    if track_rows.empty:
+            raise ValueError("Track could not be processed")
+    track_data = track_rows.iloc[0]
+    
     track_name = track_data['name']
     artist_name = track_data['artist']
 

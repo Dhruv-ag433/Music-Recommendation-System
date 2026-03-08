@@ -20,20 +20,20 @@ def process_track_id(track_id: str):
     metadata = fetch_track_data(track_id)
     if not metadata:
         print(f"[ERROR] Failed to fetch metadata for {track_id}")
-        return None
+        return {"status": "meta_fetch failed"} 
 
     # Step 2: Download audio for features
     query = f"{metadata['name']} {metadata['artist']}"
     url = search_youtube(query)
     if not url:
         print(f"[YT SEARCH ERROR] Could not find audio for {query}")
-        return None
+        return {"status": "audio_find failed"}
 
     audio_filename = f"{track_id}.mp3"
     audio_path = download_audio(url, audio_filename)
     if not audio_path:
         print(f"[DOWNLOAD ERROR] Could not download audio for {query}")
-        return None
+        return {"status": "audio_download failed"}
 
     # Step 3: Extract features
     features = extract_audio_features(audio_path)

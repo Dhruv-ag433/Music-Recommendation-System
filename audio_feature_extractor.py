@@ -16,11 +16,19 @@ os.makedirs(AUDIO_DIR, exist_ok=True)
 def search_youtube(query):
     try:
         ydl_opts = {
-            'format': 'bestaudio/best',
-            'noplaylist': True,
-            'quiet': True,
-            'default_search': 'ytsearch1',
+            "format": "bestaudio/best",
+        "quiet": True,
+        "retries": 10,
+        "sleep_interval": 2,
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android"]
+            }
+        },
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0"
         }
+    }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(query, download=False)

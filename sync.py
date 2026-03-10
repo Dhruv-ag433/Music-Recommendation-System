@@ -2,10 +2,9 @@ import os
 import psycopg2
 import psycopg2.extras
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-
 def get_existing_track_ids():
-    conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+    conn = psycopg2.connect(os.getenv("DATABASE_URL"), sslmode="require")
+    print("Connected successfully!!")
     cur = conn.cursor()
     cur.execute("SELECT track_id FROM songs;")
     ids = {row[0] for row in cur.fetchall()}
@@ -32,7 +31,7 @@ def sync_csv_to_db(df):
     if new_rows.empty:
         return
 
-    conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+    conn = psycopg2.connect(os.getenv("DATABASE_URL"), sslmode="require")
     cur = conn.cursor()
 
     records = list(
